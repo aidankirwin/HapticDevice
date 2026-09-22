@@ -3,8 +3,8 @@
     "privileged": true,
     "remoteUser": "user",
     "dockerComposeFile": "../../docker-compose.yml",
-    "service": "user",
-    "workspaceFolder": "/user_ws",
+    "service": "haptic_device",
+    "workspaceFolder": "/haptic_device_ws",
     "initializeCommand": "echo \"USER_UID=$(id -u $USER)\nUSER_GID=$(id -g $USER)\" > .env",
     "customizations": {
         "vscode": {

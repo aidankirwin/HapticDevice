@@ -27,9 +27,6 @@ services:
       # OpenHaptics
       GTDD_HOME: /haptic_device_ws/3dsystems
 
-    group_add:
-      - dialout
-
     volumes:
       - ./haptic_device:/haptic_device_ws
 
