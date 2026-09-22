@@ -1,0 +1,67 @@
+services:
+  haptic_device:
+    build:
+      context: ./haptic_device
+      dockerfile: Dockerfile
+      args:
+        USER_UID: ${USER_UID}
+        USER_GID: ${USER_GID}
+        USERNAME: user
+
+    container_name: haptic_device
+    privileged: true
+
+    command: /bin/bash
+    tty: true
+    stdin_open: true
+
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      ROS_LOCALHOST_ONLY: "0"
+
+      # GUI
+      DISPLAY: ${DISPLAY}
+      QT_X11_NO_MITSHM: "1"
+      XAUTHORITY: /tmp/.docker.xauth
+
+      # OpenHaptics
+      GTDD_HOME: /haptic_device_ws/3dsystems
+
+    group_add:
+      - dialout
+
+    volumes:
+      - ./haptic_device:/haptic_device_ws
+
+      # X11
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.docker.xauth:/tmp/.docker.xauth:ro
+
+      # Realtime limits
+      - ./limits.conf:/etc/security/limits.conf
+
+      # USB / udev
+      - /dev:/dev
+      - /run/udev:/run/udev
+
+      - ./fastdds_disable_shm.xml:/tmp/fastdds_disable_shm.xml:ro
+
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+      - "/dev/serial:/dev/serial"
+      - "/dev/ttyACM0:/dev/ttyACM0"
+
+    cap_add:
+      - SYS_NICE
+      - SYS_PTRACE
+
+    ulimits:
+      rtprio:
+        soft: 99
+        hard: 99
+      memlock:
+        soft: 102400
+        hard: 102400
+
+
+ 
